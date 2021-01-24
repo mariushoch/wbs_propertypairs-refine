@@ -1,0 +1,14 @@
+pid1,qid1,pid2,count,probability,context
+345,1,1,1,to-be-removed,item
+345,1,1,1,to-be-kept,qualifier
+17,1,1,1,to-be-removed,item
+17,1,1,1,to-be-removed,item
+1344,1,1,1,to-be-removed,item
+1344,1,1,1,to-be-kept,qualifier
+1345,1,1,1,to-be-kept,item
+569,123,31,1,to-be-removed,qualifier
+569,123,301,1,to-be-kept,qualifier
+596,123,31,1,to-be-kept,qualifier
+569,123,31,1,to-be-kept,item
+10000000001,123,31,1,to-be-kept,item
+
