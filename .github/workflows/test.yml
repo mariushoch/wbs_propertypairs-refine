@@ -1,0 +1,10 @@
+name: Test
+on: push
+
+jobs:
+  run_testsh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: run test.sh
+        run: sh test.sh
