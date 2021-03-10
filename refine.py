@@ -1,6 +1,7 @@
 import argparse
 import json
 import urllib.request
+import math
 
 parser = argparse.ArgumentParser(description='Refine wbs_propertypairs for Wikidata usage. See https://phabricator.wikimedia.org/T132839.')
 parser.add_argument("infile", help="Input file")
@@ -11,14 +12,26 @@ args = parser.parse_args()
 datatype_cache={}
 def get_datatype(property_id):
     if not property_id in datatype_cache:
-        api_url='https://www.wikidata.org/w/api.php?action=wbgetentities&props=datatype&format=json&smaxage=86400&maxage=86400'
-        with urllib.request.urlopen(api_url + '&ids=' + property_id) as result:
-            data = json.loads(result.read().decode())
-            if not 'entities' in data:
+        fetch_datatype(int(property_id.replace('P', '')))
+
+    return datatype_cache[property_id]
+
+# Fetch the datatype for numeric_property_id (and surrounding properties) and cache it in datatype_cache
+def fetch_datatype(numeric_property_id):
+    api_url='https://www.wikidata.org/w/api.php?action=wbgetentities&props=datatype&format=json&smaxage=86400&maxage=86400'
+    lowest_id = math.floor(numeric_property_id * 2 / 100) * 50
+
+    property_ids = []
+    for property_id in range(lowest_id, lowest_id + 50):
+        property_ids.append('P' + str(property_id))
+
+    with urllib.request.urlopen(api_url + '&ids=' + '|'.join(property_ids)) as result:
+        data = json.loads(result.read().decode())
+        for property_id in property_ids:
+            if not 'entities' in data or 'missing' in data['entities'][property_id]:
                 datatype_cache[property_id] = 'missing'
             else:
                 datatype_cache[property_id] = data['entities'][property_id]['datatype']
-    return datatype_cache[property_id]
 
 # Returns true if the given line should be omitted
 def filter_line(line):
