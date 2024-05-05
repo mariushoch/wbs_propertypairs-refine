@@ -50,7 +50,7 @@ def filter_line(line):
     if context == 'item' and get_datatype('P' + str(pid1)) == 'external-id':
         return True
     # These are totally excluded (in context=item)
-    if context == 'item' and pid1 in [17, 18, 276, 301, 373, 463, 495, 571, 641, 1344, 1448, 1476]:
+    if context == 'item' and pid1 in [17, 18, 50, 276, 301, 304, 361, 373, 407, 433, 459, 463, 478, 495, 528, 571, 577, 585, 641, 921, 972, 1344, 1443, 1448, 1476, 1545, 1932, 2093]:
         return True
     # Remove P31 qualifier suggestions for these
     if context == 'qualifier' and pid1 in [569, 570, 571, 576] and pid2 == 31:
